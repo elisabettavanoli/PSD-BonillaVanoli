@@ -1,12 +1,11 @@
-# Babies360
+# Clinical Trial
 (this is a sample text. Revise according to your process)
 We want to model the service offered by a house renovation company to its clients. The house renovation company service relies on the services offered by a set of plumbers, electrician, constructors
 Based on the requests of the client (the householder) contact them and select the best ones
 
 ## Members:
-* member A (Firstname, Lastname, Person Code) 
-* member B (Firstname, Lastname, Person Code)
-* member C (Firstname, Lastname, Person Code)
+* Andres Bonilla 10698144
+* Elisabetta Vanoli 10777232
 
 ## Choreographed process
 Short description of the choreographed process
