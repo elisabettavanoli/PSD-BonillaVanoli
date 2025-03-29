@@ -1,21 +1,20 @@
 # Clinical Trial
-(this is a sample text. Revise according to your process)
-We want to model the service offered by a house renovation company to its clients. The house renovation company service relies on the services offered by a set of plumbers, electrician, constructors
-Based on the requests of the client (the householder) contact them and select the best ones
+The initiator design a trial protocol. It asks for the internal ethical committee's approval, which can approve it, deny it or ask for modification. The initiator has 3 chances total to get the committee's approval. Once the trial protocol is approved, the initiator contacts collaborators and ask them if they want to partecipate in the trial and waits 10 days for their answers. If at least 5 collaborators accept the collaboration, the initiator notifies them to start experimenting and send back the results within 3 months. Once the initiator has collected all results, it draws a final report on the trial and send the results to all the collaborators who participated.
 
 ## Members:
 * Andres Bonilla 10698144
 * Elisabetta Vanoli 10777232
 
 ## Choreographed process
-Short description of the choreographed process
+The initiator, after getting the internal ethical committee's approval, starts the process by sending an invite to collaborators to partecipate in the clinical trial. After 10 days, if at least 5 collaborators decided to participate, the initiator send them a notification to start the experimentation. They have 90 days to send back their results; if the collaborators did not sent them in 80 days, the initiator sends them a reminder. Once the results are collected, the initiator analyzes all the received results and writes a final report of the clinical trial and sends it to those who participated.
 
-place here an image of the BPMN Choreography diagram
+<img width="1506" alt="Screenshot 2025-03-29 at 15 00 36" src="https://github.com/user-attachments/assets/9391ba43-d471-4431-a261-0c76aaefc1e4" />
 
 
 ## Collaboration Diagram
 
-place here an image of the BPMN Collaboration diagram, where the only white box is for the Babies360, the others will be black-boxes
+<img width="1618" alt="Screenshot 2025-03-29 at 15 08 03" src="https://github.com/user-attachments/assets/63340669-33d2-4411-99c7-3c39558e2443" />
+
 
 ## Petri Net
 
