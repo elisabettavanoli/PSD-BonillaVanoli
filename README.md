@@ -17,8 +17,12 @@ The initiator, after getting the internal ethical committee's approval, starts t
 
 
 ## Petri Net
-
-place here the image of the PetriNet corresponding to the Baby360 executable model
+### Clinical trial process
+![Clinical trial process](images/nets/clinicalTrial_process.png)
+### Collecting results subprocess
+![Collecting results subprocess](images/nets/collectingResults_subprocess.png)
+### Request for participation subprocess
+![Request for participation subprocess](images/nets/requestForParticipation_subprocess.png)
 
 # Third party services
 * baby sitters
