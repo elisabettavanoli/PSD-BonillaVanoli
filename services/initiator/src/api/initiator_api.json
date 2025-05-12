@@ -1,0 +1,157 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trial Internal API",
+    "version": "1.0.0",
+    "description": "API for managing trial results and reporting."
+  },
+  "paths": {
+    "/trial/evaluateResults": {
+      "get": {
+        "summary": "Evaluate the results of a trial",
+        "operationId": "evaluateResults",
+        "requestBody": {
+          "description": "Data for evaluating trial results",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id_collaborator": {
+                          "type": "string"
+                        },
+                        "num_samples": {
+                          "type": "integer"
+                        },
+                        "num_success": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id_collaborator",
+                        "num_samples",
+                        "num_success"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully evaluated the trial results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "satisfied": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "satisfied"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/trial/createReport": {
+      "get": {
+        "summary": "Create a report based on trial results",
+        "operationId": "createReport",
+        "requestBody": {
+          "description": "Data for creating a trial report",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id_collaborator": {
+                          "type": "string"
+                        },
+                        "num_samples": {
+                          "type": "integer"
+                        },
+                        "num_success": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id_collaborator",
+                        "num_samples",
+                        "num_success"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created the trial report",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "object",
+                      "properties": {
+                        "sample_total": {
+                          "type": "integer"
+                        },
+                        "success_average": {
+                          "type": "number",
+                          "format": "float"
+                        }
+                      },
+                      "required": [
+                        "sample_total",
+                        "success_average"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "results"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  }
+}

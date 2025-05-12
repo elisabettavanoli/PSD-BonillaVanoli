@@ -1,0 +1,375 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Collaborator Trial API",
+    "version": "1.0.0",
+    "description": "API set for collaborators involved clinical trials."
+  },
+  "servers": [
+    {
+      "url": "https://myurl/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://myurl-test/v1",
+      "description": "Test server"
+    }
+  ],
+  "paths": {
+    "/trial/requestParticipation": {
+      "post": {
+        "summary": "Request participation in a trial",
+        "operationId": "requestParticipation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participation request processed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/trial/{id}/cancelled": {
+      "post": {
+        "summary": "Notify trial cancellation",
+        "operationId": "trialCancelled",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancellationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cancellation notification sent"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          }
+        }
+      }
+    },
+    "/trial/{id}/start": {
+      "post": {
+        "summary": "Start a trial",
+        "operationId": "trialStarted",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trial started"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          }
+        }
+      }
+    },
+    "/trial/{id}/reminder": {
+      "post": {
+        "summary": "Send reminder for a trial",
+        "operationId": "trialReminder",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReminderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reminder sent"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          }
+        }
+      }
+    },
+    "/trial/{id}/result": {
+      "post": {
+        "summary": "Submit trial result",
+        "operationId": "trialResult",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResultSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result submitted"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
+    "schemas": {
+      "ParticipationRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "target_type": {
+            "type": "string",
+            "enum": [
+              "human",
+              "sample",
+              "animal"
+            ]
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Duration in days"
+          },
+          "min_num_samples": {
+            "type": "integer"
+          },
+          "remuneration": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "category",
+          "target_type",
+          "duration",
+          "min_num_samples",
+          "remuneration"
+        ]
+      },
+      "ParticipationResponse": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean",
+            "description": "Indicates if the participation request was accepted"
+          },
+          "reason": {
+            "type": "string",
+            "description": "If not accepted, provides a reason for the rejection"
+          }
+        },
+        "required": [
+          "accepted"
+        ]
+      },
+      "CancellationRequest": {
+        "type": "object",
+        "properties": {
+          "justification": {
+            "type": "string",
+            "enum": [
+              "Not enought collaboratos",
+              "Not enough results"
+            ]
+          }
+        },
+        "required": [
+          "justification"
+        ]
+      },
+      "StartRequest": {
+        "type": "object",
+        "properties": {
+          "startAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "startAt",
+          "endAt"
+        ]
+      },
+      "ReminderRequest": {
+        "type": "object",
+        "properties": {
+          "startAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "startAt",
+          "endAt"
+        ]
+      },
+      "ResultSubmission": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "samples_total": {
+                "type": "integer"
+              },
+              "success_average": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": [
+              "samples_total",
+              "success_average"
+            ]
+          }
+        },
+        "required": [
+          "result"
+        ]
+      }
+    }
+  }
+}
