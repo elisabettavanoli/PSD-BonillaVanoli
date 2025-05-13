@@ -1,0 +1,22 @@
+{
+  "correlationSets": [
+    {
+      "apiDescription": "Api for requestCollaboration response",
+      "correlationSet": {
+        "id_trial": "string",
+        "id_collaborator": "string",
+        "accepted": "boolean"
+      }
+    },
+    {
+      "apiDescription": "Api for collect result response",
+      "correlationSet": {
+        "id_trial": "string",
+        "result": {
+          "num_samples": "number",
+          "num_success": "number"
+        }
+      }
+    }
+  ]
+}

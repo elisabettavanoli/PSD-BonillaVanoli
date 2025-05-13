@@ -5,23 +5,31 @@
     "version": "1.0.0",
     "description": "API for managing trial results and reporting."
   },
+  "servers": [
+    {
+      "url": "https://initiatorurl/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://initiatorurl-test/v1",
+      "description": "Test server"
+    }
+  ],
   "paths": {
     "/trial/evaluateResults": {
       "get": {
         "summary": "Evaluate the results of a trial",
         "operationId": "evaluateResults",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{
+          "bearerAuth": []
+        }],
         "requestBody": {
           "description": "Data for evaluating trial results",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CollaboratorEvaluationInput"
+                "$ref": "#/components/schemas/EvaluationRequest"
               }
             }
           }
@@ -32,13 +40,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EvaluationResult"
+                  "$ref": "#/components/schemas/EvaluationResponse"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -50,18 +55,16 @@
       "get": {
         "summary": "Create a report based on trial results",
         "operationId": "createReport",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{
+          "bearerAuth": []
+        }],
         "requestBody": {
           "description": "Data for creating a trial report",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CollaboratorEvaluationInput"
+                "$ref": "#/components/schemas/EvaluationRequest"
               }
             }
           }
@@ -72,13 +75,61 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReportResult"
+                  "$ref": "#/components/schemas/ReportResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request"
+          "404": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/trial/{id}": {
+      "post": {
+        "summary": "Store trial in database",
+        "operationId": "storeTrial",
+        "security": [{
+          "bearerAuth": []
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the trial",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrialSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trial data successfully processed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid input"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -89,11 +140,11 @@
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
     },
     "responses": {
       "UnauthorizedError": {
@@ -101,7 +152,7 @@
       }
     },
     "schemas": {
-      "CollaboratorData": {
+      "CollaboratorResult": {
         "type": "object",
         "properties": {
           "id_collaborator": {
@@ -116,19 +167,19 @@
         },
         "required": ["id_collaborator", "num_samples", "num_success"]
       },
-      "CollaboratorEvaluationInput": {
+      "EvaluationRequest": {
         "type": "object",
         "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CollaboratorData"
+              "$ref": "#/components/schemas/CollaboratorResult"
             }
           }
         },
         "required": ["data"]
       },
-      "EvaluationResult": {
+      "EvaluationResponse": {
         "type": "object",
         "properties": {
           "satisfied": {
@@ -137,7 +188,7 @@
         },
         "required": ["satisfied"]
       },
-      "ReportResult": {
+      "ReportResponse": {
         "type": "object",
         "properties": {
           "results": {
@@ -155,6 +206,69 @@
           }
         },
         "required": ["results"]
+      },
+      "Trial": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "targetType": {
+            "type": "string"
+          },
+          "minNumSamples": {
+            "type": "integer"
+          },
+          "remuneration": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "required": ["title", "description", "category", "targetType", "minNumSamples", "remuneration"]
+      },
+      "TrialResult": {
+        "type": "object",
+        "properties": {
+          "num_samples": {
+            "type": "integer"
+          },
+          "num_success": {
+            "type": "integer"
+          }
+        },
+        "required": ["num_samples", "num_success"]
+      },
+      "TrialSubmission": {
+        "type": "object",
+        "properties": {
+          "trial": {
+            "$ref": "#/components/schemas/Trial"
+          },
+          "collaborators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "result": {
+            "$ref": "#/components/schemas/TrialResult"
+          }
+        },
+        "required": ["trial", "collaborators", "result"]
+      },
+      "SuccessMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
       }
     }
   }
