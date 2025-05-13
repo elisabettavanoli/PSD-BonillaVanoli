@@ -10,37 +10,21 @@
       "get": {
         "summary": "Evaluate the results of a trial",
         "operationId": "evaluateResults",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Data for evaluating trial results",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "data": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id_collaborator": {
-                          "type": "string"
-                        },
-                        "num_samples": {
-                          "type": "integer"
-                        },
-                        "num_success": {
-                          "type": "integer"
-                        }
-                      },
-                      "required": ["id_collaborator", "num_samples", "num_success"]
-                    }
-                  }
-                },
-                "required": ["data"]
+                "$ref": "#/components/schemas/CollaboratorEvaluationInput"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -48,19 +32,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "satisfied": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": ["satisfied"]
+                  "$ref": "#/components/schemas/EvaluationResult"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -69,37 +50,21 @@
       "get": {
         "summary": "Create a report based on trial results",
         "operationId": "createReport",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Data for creating a trial report",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "data": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id_collaborator": {
-                          "type": "string"
-                        },
-                        "num_samples": {
-                          "type": "integer"
-                        },
-                        "num_success": {
-                          "type": "integer"
-                        }
-                      },
-                      "required": ["id_collaborator", "num_samples", "num_success"]
-                    }
-                  }
-                },
-                "required": ["data"]
+                "$ref": "#/components/schemas/CollaboratorEvaluationInput"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -107,31 +72,89 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "results": {
-                      "type": "object",
-                      "properties": {
-                        "sample_total": {
-                          "type": "integer"
-                        },
-                        "success_average": {
-                          "type": "number",
-                          "format": "float"
-                        }
-                      },
-                      "required": ["sample_total", "success_average"]
-                    }
-                  },
-                  "required": ["results"]
+                  "$ref": "#/components/schemas/ReportResult"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
+    "schemas": {
+      "CollaboratorData": {
+        "type": "object",
+        "properties": {
+          "id_collaborator": {
+            "type": "string"
+          },
+          "num_samples": {
+            "type": "integer"
+          },
+          "num_success": {
+            "type": "integer"
+          }
+        },
+        "required": ["id_collaborator", "num_samples", "num_success"]
+      },
+      "CollaboratorEvaluationInput": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollaboratorData"
+            }
+          }
+        },
+        "required": ["data"]
+      },
+      "EvaluationResult": {
+        "type": "object",
+        "properties": {
+          "satisfied": {
+            "type": "boolean"
+          }
+        },
+        "required": ["satisfied"]
+      },
+      "ReportResult": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "object",
+            "properties": {
+              "sample_total": {
+                "type": "integer"
+              },
+              "success_average": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": ["sample_total", "success_average"]
+          }
+        },
+        "required": ["results"]
       }
     }
   }
