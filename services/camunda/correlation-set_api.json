@@ -1,7 +1,7 @@
 {
   "correlationSets": [
     {
-      "apiDescription": "Api for requestCollaboration response",
+      "apiDescription": "Async Api for accept/deny participation",
       "correlationSet": {
         "id_trial": "string",
         "id_collaborator": "string",
@@ -9,7 +9,7 @@
       }
     },
     {
-      "apiDescription": "Api for collect result response",
+      "apiDescription": "Async Api for share own results",
       "correlationSet": {
         "id_trial": "string",
         "result": {

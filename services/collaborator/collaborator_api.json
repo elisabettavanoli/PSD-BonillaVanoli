@@ -16,10 +16,10 @@
     }
   ],
   "paths": {
-    "/trial/requestParticipation": {
+    "/trials": {
       "post": {
-        "summary": "Request participation in a trial",
-        "operationId": "requestParticipation",
+        "summary": "Create the 'trial' resource in the collaborator context, which will initialize the trial status with 'WAITING_FOR_START' ",
+        "operationId": "createTrial",
         "security": [{
           "bearerAuth": []
         }],
@@ -27,18 +27,13 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ParticipationRequest" }
+              "schema": { "$ref": "#/components/schemas/CreationRequest" }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Participation request processed",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ParticipationResponse" }
-              }
-            }
+          "201": {
+            "description": "Trial created"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -46,16 +41,38 @@
         }
       }
     },
-    "/trial/{id}/cancelled": {
-      "post": {
-        "summary": "Notify trial cancellation",
-        "operationId": "trialCancelled",
+    "/trials/{trialId}": {
+      "delete": {
+        "summary": "Delete the trial resource in the collaborator context",
+        "operationId": "deleteTrial",
         "security": [{
           "bearerAuth": []
         }],
         "parameters": [
           {
-            "name": "id",
+            "name": "trialId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Trial deleted" },
+          "404": { "description": "Trial not found" },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "put" : {
+        "summary": "Update the status (started, ended, ...) of the trial resource in the collaborator context",
+        "operationId": "updateTrialStatus",
+        "security": [{
+          "bearerAuth": []
+        }],
+        "parameters": [
+          {
+            "name": "trialId",
             "in": "path",
             "required": true,
             "schema": { "type": "string" }
@@ -65,12 +82,12 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CancellationRequest" }
+              "schema": { "$ref": "#/components/schemas/UpdateStatusRequest" }
             }
           }
         },
         "responses": {
-          "200": { "description": "Cancellation notification sent" },
+          "200": { "description": "Trial status updated" },
           "404": { "description": "Trial not found" },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -78,48 +95,16 @@
         }
       }
     },
-    "/trial/{id}/start": {
+    "/trials/{trialId}/reminders": {
       "post": {
-        "summary": "Start a trial",
-        "operationId": "trialStarted",
-        "security": [{
-          "bearerAuth": []
-        }],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/StartRequest" }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Trial started" },
-          "404": { "description": "Trial not found" },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      }
-    },
-    "/trial/{id}/reminder": {
-      "post": {
-        "summary": "Send reminder for a trial",
+        "summary": "Create a sub-resource reminder in the collaborator context",
         "operationId": "trialReminder",
         "security": [{
           "bearerAuth": []
         }],
         "parameters": [
           {
-            "name": "id",
+            "name": "trialId",
             "in": "path",
             "required": true,
             "schema": { "type": "string" }
@@ -134,7 +119,7 @@
           }
         },
         "responses": {
-          "200": { "description": "Reminder sent" },
+          "201": { "description": "Reminder created" },
           "404": { "description": "Trial not found" },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -142,16 +127,16 @@
         }
       }
     },
-    "/trial/{id}/result": {
-      "post": {
-        "summary": "Submit trial result",
-        "operationId": "trialResult",
+    "/trials/{trialId}/report": {
+      "put": {
+        "summary": "Create or update a single sub-resource report in the collaborator context",
+        "operationId": "trialReport",
         "security": [{
           "bearerAuth": []
         }],
         "parameters": [
           {
-            "name": "id",
+            "name": "trialId",
             "in": "path",
             "required": true,
             "schema": { "type": "string" }
@@ -161,12 +146,12 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ResultSubmission" }
+              "schema": { "$ref": "#/components/schemas/ReportRequest" }
             }
           }
         },
         "responses": {
-          "200": { "description": "Result submitted" },
+          "200": { "description": "Report updated" },
           "404": { "description": "Trial not found" },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -189,10 +174,10 @@
       }
     },
     "schemas": {
-      "ParticipationRequest": {
+      "CreationRequest": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
+          "trialId": { "type": "string", "description": "This id is generated by the Initiator and it's unique for all collaborators" },
           "title": { "type": "string" },
           "description": { "type": "string" },
           "category": { "type": "string" },
@@ -201,7 +186,7 @@
           "min_num_samples": { "type": "integer" },
           "remuneration": { "type": "number", "format": "float" }
         },
-        "required": ["id", "title", "description", "category", "target_type", "duration", "min_num_samples", "remuneration"]
+        "required": ["trialId", "title", "description", "category", "target_type", "duration", "min_num_samples", "remuneration"]
       },
       "ParticipationResponse": {
         "type": "object",
@@ -217,33 +202,24 @@
         },
         "required": ["accepted"]
       },
-      "CancellationRequest": {
+      "UpdateStatusRequest": {
         "type": "object",
         "properties": {
-          "justification": {
+          "status": {
             "type": "string",
-            "enum": ["Not enought collaboratos", "Not enough results"]
+            "enum": ["WAITING_FOR_START", "STARTED", "ENDED"]
           }
         },
-        "required": ["justification"]
-      },
-      "StartRequest": {
-        "type": "object",
-        "properties": {
-          "startAt": { "type": "string", "format": "date-time" },
-          "endAt": { "type": "string", "format": "date-time" }
-        },
-        "required": ["startAt", "endAt"]
+        "required": ["status"]
       },
       "ReminderRequest": {
         "type": "object",
         "properties": {
-          "startAt": { "type": "string", "format": "date-time" },
           "endAt": { "type": "string", "format": "date-time" }
         },
-        "required": ["startAt", "endAt"]
+        "required": ["endAt"]
       },
-      "ResultSubmission": {
+      "ReportRequest": {
         "type": "object",
         "properties": {
           "result": {
