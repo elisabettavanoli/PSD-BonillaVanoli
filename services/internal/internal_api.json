@@ -93,23 +93,16 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Successfully evaluated the trial results",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/EvaluationResponse" }
-              }
-            }
-          },
+          "200": { "description": "Successfully created or updated the trial result" },
           "401": { "$ref": "#/components/responses/UnauthorizedError" },
           "404": { "description": "Trial not found" }
         }
       }
     },
-    "/trials/{trialId}/results/evaluate": {
+    "/trials/{trialId}/results": {
       "get": {
-        "summary": "Return evaluation of results for a specific trial, the result is a boolean which indicates if the trial has enough results to be considered as valid",
-        "operationId": "getResultsEvaluation",
+        "summary": "Return all results for a specific trial",
+        "operationId": "getResults",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -124,34 +117,7 @@
             "description": "Successfully retrieved evaluation of trial results",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/EvaluationResponse" }
-              }
-            }
-          },
-          "401": { "$ref": "#/components/responses/UnauthorizedError" },
-          "404": { "description": "Trial not found" }
-        }
-      }
-    },
-    "/trials/{trialId}/results/elaborate": {
-      "get": {
-        "summary": "Return the summary of the trial results",
-        "operationId": "getResultsElaboration",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "name": "trialId",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrueved trial results summary",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ElaborationResponse" }
+                "schema": { "$ref": "#/components/schemas/ResultResponse" }
               }
             }
           },
@@ -178,7 +144,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ElaborationResponse" }
+              "schema": { "$ref": "#/components/schemas/CreationRequest" }
             }
           }
         },
@@ -251,14 +217,7 @@
         },
         "required": ["num_samples", "num_success"]
       },
-      "EvaluationResponse": {
-        "type": "object",
-        "properties": {
-          "satisfied": { "type": "boolean" }
-        },
-        "required": ["satisfied"]
-      },
-      "ElaborationResponse": {
+      "ResultResponse": {
         "type": "object",
         "properties": {
           "results": {
@@ -270,7 +229,7 @@
             "required": ["sample_total", "success_average"]
           }
         },
-        "required": ["results"]
+        "required": ["satisfied"]
       }
     }
   }
