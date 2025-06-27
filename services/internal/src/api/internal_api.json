@@ -1,24 +1,24 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Collaborator Trial API",
+    "title": "Trial Internal API",
     "version": "1.0.0",
-    "description": "API set for collaborators involved clinical trials."
+    "description": "API for managing trial results and reporting."
   },
   "servers": [
     {
-      "url": "https://collaboratorurl/v1",
+      "url": "https://initiatorurl/v1",
       "description": "Production server"
     },
     {
-      "url": "https://collaboratorurl-test/v1",
+      "url": "https://initiatorurl-test/v1",
       "description": "Test server"
     }
   ],
   "paths": {
     "/trials": {
       "post": {
-        "summary": "Create the 'trial' resource in the collaborator context, which will initialize the trial status with 'WAITING_FOR_START' ",
+        "summary": "Create a new trial resource in the Initiator context",
         "operationId": "createTrial",
         "security": [
           {
@@ -37,7 +37,14 @@
         },
         "responses": {
           "201": {
-            "description": "Trial created"
+            "description": "Trial created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreationResponse"
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -47,7 +54,7 @@
     },
     "/trials/{trialId}": {
       "delete": {
-        "summary": "Delete the trial resource in the collaborator context",
+        "summary": "Delete a trial resource in the Initiator context",
         "operationId": "deleteTrial",
         "security": [
           {
@@ -65,48 +72,8 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Trial deleted"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "description": "Trial not found"
-          }
-        }
-      },
-      "put": {
-        "summary": "Update the status (started, ended, ...) of the trial resource in the collaborator context",
-        "operationId": "updateTrialStatus",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "trialId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateStatusRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Trial status updated"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -117,10 +84,61 @@
         }
       }
     },
-    "/trials/{trialId}/reminders": {
-      "post": {
-        "summary": "Create a sub-resource reminder in the collaborator context",
-        "operationId": "trialReminder",
+    "/trials/{trialId}/results/{collaboratorId}": {
+      "put": {
+        "summary": "Create or update a sub-resource result of a specific collaborator for a given trial",
+        "operationId": "createResult",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "trialId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collaboratorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Single collaborator result for the trial",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResultRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created or updated the trial result"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          }
+        }
+      }
+    },
+    "/trials/{trialId}/results": {
+      "get": {
+        "summary": "Return all results for a specific trial",
+        "operationId": "getResults",
         "security": [
           {
             "bearerAuth": []
@@ -136,19 +154,16 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ReminderRequest"
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved evaluation of trial results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultResponse"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Reminder created"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -161,8 +176,8 @@
     },
     "/trials/{trialId}/report": {
       "put": {
-        "summary": "Create or update a single sub-resource report in the collaborator context",
-        "operationId": "trialReport",
+        "summary": "Create a report resource for a specific trial within the Initiator context",
+        "operationId": "createReport",
         "security": [
           {
             "bearerAuth": []
@@ -179,18 +194,19 @@
           }
         ],
         "requestBody": {
+          "description": "Report details for the trial",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ReportRequest"
+                "$ref": "#/components/schemas/CreationRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Report updated"
+            "description": "The report was successfully created"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
@@ -219,10 +235,6 @@
       "CreationRequest": {
         "type": "object",
         "properties": {
-          "trialId": {
-            "type": "string",
-            "description": "This id is generated by the Initiator and it's unique for all collaborators"
-          },
           "title": {
             "type": "string"
           },
@@ -253,7 +265,6 @@
           }
         },
         "required": [
-          "trialId",
           "title",
           "description",
           "category",
@@ -263,57 +274,40 @@
           "remuneration"
         ]
       },
-      "ParticipationResponse": {
+      "CreationResponse": {
         "type": "object",
         "properties": {
-          "accepted": {
-            "type": "boolean",
-            "description": "Indicates if the participation request was accepted"
+          "trialId": {
+            "type": "string",
+            "description": "Unique ID for the trial, also unique among Collaborators"
+          }
+        },
+        "required": [
+          "trialId"
+        ]
+      },
+      "ResultRequest": {
+        "type": "object",
+        "properties": {
+          "num_samples": {
+            "type": "integer"
           },
-          "reason": {
-            "type": "string",
-            "description": "If not accepted, provides a reason for the rejection"
+          "num_success": {
+            "type": "integer"
           }
         },
         "required": [
-          "accepted"
+          "num_samples",
+          "num_success"
         ]
       },
-      "UpdateStatusRequest": {
+      "ResultResponse": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "WAITING_FOR_START",
-              "STARTED",
-              "ENDED"
-            ]
-          }
-        },
-        "required": [
-          "status"
-        ]
-      },
-      "ReminderRequest": {
-        "type": "object",
-        "properties": {
-          "endAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "endAt"
-        ]
-      },
-      "ReportRequest": {
-        "type": "object",
-        "properties": {
-          "result": {
+          "results": {
             "type": "object",
             "properties": {
-              "samples_total": {
+              "sample_total": {
                 "type": "integer"
               },
               "success_average": {
@@ -322,13 +316,13 @@
               }
             },
             "required": [
-              "samples_total",
+              "sample_total",
               "success_average"
             ]
           }
         },
         "required": [
-          "result"
+          "satisfied"
         ]
       }
     }

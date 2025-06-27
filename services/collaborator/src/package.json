@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "API set for collaborators involved clinical trials.",
     "license": "UNLICENSED",
-    
+    "type": "module",
     "private": true,
     "main": "index.js",
     "scripts": {

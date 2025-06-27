@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "API for managing trial results and reporting.",
     "license": "UNLICENSED",
-    
+    "type": "module",
     "private": true,
     "main": "index.js",
     "scripts": {

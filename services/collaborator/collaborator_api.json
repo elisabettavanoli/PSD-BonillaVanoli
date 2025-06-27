@@ -207,7 +207,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["WAITING_FOR_START", "STARTED", "ENDED"]
+            "enum": ["STARTED", "ENDED"]
           }
         },
         "required": ["status"]
