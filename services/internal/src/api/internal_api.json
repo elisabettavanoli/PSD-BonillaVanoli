@@ -48,6 +48,9 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -80,6 +83,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -131,6 +137,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -170,6 +179,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -199,7 +211,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreationRequest"
+                "$ref": "#/components/schemas/ReportRequest"
               }
             }
           }
@@ -213,6 +225,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -301,6 +316,20 @@
           "num_success"
         ]
       },
+      "ReportRequest": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "samples_total": { "type": "integer" },
+              "success_average": { "type": "number", "format": "float" }
+            },
+            "required": ["samples_total", "success_average"]
+          }
+        },
+        "required": ["result"]
+      },
       "ResultResponse": {
         "type": "object",
         "properties": {
@@ -320,10 +349,7 @@
               "success_average"
             ]
           }
-        },
-        "required": [
-          "satisfied"
-        ]
+        }
       }
     }
   }
