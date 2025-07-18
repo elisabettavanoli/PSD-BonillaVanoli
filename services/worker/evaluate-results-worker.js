@@ -18,17 +18,19 @@ const camunda = new Camunda8({
 
 const zeebe = camunda.getZeebeGrpcApiClient();
 
-// susbscribe to the topic: 'charge-card'
 zeebe.createWorker({
-  taskType: "evaluate-answers-worker",
-  taskHandler: async (job) => {
-    console.log("Handling job: "+ job.key + job.type + "with payload " + JSON.stringify(job));
-	var approved = true;
-    console.log(`Handling job: ${job.key} card charged`);
-	console.log(job.variables.trialId);
-    return job.complete({
-		"approved": approved
-	 });
-  },
-  //timeout: 15000,
+	taskType: "evaluate-answers-worker",
+	taskHandler: async (job) => {
+		const participantsResults = job.variables.participants_results || [];
+		const finalParticipants = participantsResults.map(entry => entry[0]);
+		const approved = finalParticipants.length > 1;
+
+		console.log(`Final Participants: ${finalParticipants}, Approved: ${approved}`);
+
+		return job.complete({
+			participants: finalParticipants,
+			approved
+		});
+	},
+	//timeout: 15000,
 });

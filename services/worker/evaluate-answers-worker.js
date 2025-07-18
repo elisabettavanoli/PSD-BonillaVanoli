@@ -18,17 +18,27 @@ const camunda = new Camunda8({
 
 const zeebe = camunda.getZeebeGrpcApiClient();
 
-// susbscribe to the topic: 'charge-card'
 zeebe.createWorker({
   taskType: "evaluate-answers-worker",
   taskHandler: async (job) => {
-    console.log("Handling job: "+ job.key + job.type + "with payload " + JSON.stringify(job));
-	var approved = true;
-    console.log(`Handling job: ${job.key} card charged`);
-	console.log(job.variables.trialId);
+    const collaboratorsAnswers = job.variables.collaborators_answers || [];
+
+    // Estrai solo gli ID dei collaboratori che hanno risposto "yes" e rimuovi duplicati
+    const participantsIds = Array.from(new Set(
+      collaboratorsAnswers
+        .filter(([_, answer]) => answer === "yes")
+        .map(([collaborator_id, _]) => collaborator_id)
+    ));
+
+    //const approved = participants.length > 2;
+      const approved = true;
+
+    console.log(`Participants: ${participantsIds}, Approved: ${approved}`);
+
     return job.complete({
-		"approved": approved
-	 });
+        participantsIds,
+        approved
+    });
   },
   //timeout: 15000,
 });
