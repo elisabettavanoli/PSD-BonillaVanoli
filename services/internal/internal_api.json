@@ -20,12 +20,18 @@
       "post": {
         "summary": "Create a new trial resource in the Initiator context",
         "operationId": "createTrial",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreationRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/CreationRequest"
+              }
             }
           }
         },
@@ -34,12 +40,17 @@
             "description": "Trial created",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/CreationResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/CreationResponse"
+                }
               }
             }
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -48,19 +59,34 @@
       "delete": {
         "summary": "Delete a trial resource in the Initiator context",
         "operationId": "deleteTrial",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "trialId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Trial deleted" },
-          "401": { "$ref": "#/components/responses/UnauthorizedError" },
-          "404": { "description": "Trial not found" }
+          "204": {
+            "description": "Trial deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
@@ -68,19 +94,27 @@
       "put": {
         "summary": "Create or update a sub-resource result of a specific collaborator for a given trial",
         "operationId": "createResult",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "trialId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "collaboratorId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -88,14 +122,25 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ResultRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/ResultRequest"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Successfully created or updated the trial result" },
-          "401": { "$ref": "#/components/responses/UnauthorizedError" },
-          "404": { "description": "Trial not found" }
+          "200": {
+            "description": "Successfully created or updated the trial result"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
@@ -103,13 +148,19 @@
       "get": {
         "summary": "Return all results for a specific trial",
         "operationId": "getResults",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "trialId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -117,12 +168,21 @@
             "description": "Successfully retrieved evaluation of trial results",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ResultResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ResultResponse"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/UnauthorizedError" },
-          "404": { "description": "Trial not found" }
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
@@ -130,13 +190,19 @@
       "put": {
         "summary": "Create a report resource for a specific trial within the Initiator context",
         "operationId": "createReport",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "trialId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -144,7 +210,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ReportRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
             }
           }
         },
@@ -152,8 +220,15 @@
           "200": {
             "description": "The report was successfully created"
           },
-          "404": { "description": "Trial not found" },
-          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     }
@@ -175,19 +250,34 @@
       "CreationRequest": {
         "type": "object",
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "category": { "type": "string" },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
           "target_type": {
             "type": "string",
-            "enum": ["human", "sample", "animal"]
+            "enum": [
+              "human",
+              "sample",
+              "animal"
+            ]
           },
           "duration": {
             "type": "integer",
             "description": "Duration in days"
           },
-          "min_num_samples": { "type": "integer" },
-          "remuneration": { "type": "number", "format": "float" }
+          "min_num_samples": {
+            "type": "integer"
+          },
+          "remuneration": {
+            "type": "number",
+            "format": "float"
+          }
         },
         "required": [
           "title",
@@ -207,15 +297,24 @@
             "description": "Unique ID for the trial, also unique among Collaborators"
           }
         },
-        "required": ["trialId"]
+        "required": [
+          "trialId"
+        ]
       },
       "ResultRequest": {
         "type": "object",
         "properties": {
-          "num_samples": { "type": "integer" },
-          "num_success": { "type": "integer" }
+          "num_samples": {
+            "type": "integer"
+          },
+          "num_success": {
+            "type": "integer"
+          }
         },
-        "required": ["num_samples", "num_success"]
+        "required": [
+          "num_samples",
+          "num_success"
+        ]
       },
       "ReportRequest": {
         "type": "object",
@@ -237,13 +336,20 @@
           "results": {
             "type": "object",
             "properties": {
-              "sample_total": { "type": "integer" },
-              "success_average": { "type": "number", "format": "float" }
+              "sample_total": {
+                "type": "integer"
+              },
+              "success_average": {
+                "type": "number",
+                "format": "float"
+              }
             },
-            "required": ["sample_total", "success_average"]
+            "required": [
+              "sample_total",
+              "success_average"
+            ]
           }
-        },
-        "required": ["satisfied"]
+        }
       }
     }
   }

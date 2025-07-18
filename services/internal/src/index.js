@@ -24,7 +24,6 @@ const config = {middleware: {
 }
 */
 
-
 initialize(app, config).then(() => {
     http.createServer(app).listen(serverPort, () => {
     console.log("\nApp running at http://localhost:" + serverPort);
