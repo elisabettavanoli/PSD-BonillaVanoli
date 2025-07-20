@@ -19,7 +19,7 @@ const camunda = new Camunda8({
 const zeebe = camunda.getZeebeGrpcApiClient();
 
 zeebe.createWorker({
-	taskType: "evaluate-answers-worker",
+	taskType: "evaluate-results-worker",
 	taskHandler: async (job) => {
 		const participantsResults = job.variables.participants_results || [];
 		const finalParticipants = participantsResults.map(entry => entry[0]);
@@ -28,7 +28,7 @@ zeebe.createWorker({
 		console.log(`Final Participants: ${finalParticipants}, Approved: ${approved}`);
 
 		return job.complete({
-			participants: finalParticipants,
+			finalParticipants,
 			approved
 		});
 	},

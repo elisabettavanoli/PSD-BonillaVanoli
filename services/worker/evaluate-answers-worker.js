@@ -21,7 +21,9 @@ const zeebe = camunda.getZeebeGrpcApiClient();
 zeebe.createWorker({
   taskType: "evaluate-answers-worker",
   taskHandler: async (job) => {
+    console.log("Received job variables:", job.variables);
     const collaboratorsAnswers = job.variables.collaborators_answers || [];
+    console.log("Collaborators answers:", collaboratorsAnswers);
 
     // Estrai solo gli ID dei collaboratori che hanno risposto "yes" e rimuovi duplicati
     const participantsIds = Array.from(new Set(

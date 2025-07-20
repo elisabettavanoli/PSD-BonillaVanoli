@@ -18,19 +18,48 @@ const camunda = new Camunda8({
 
 const zeebe = camunda.getZeebeGrpcApiClient();
 
-// susbscribe to the topic: 'charge-card'
+
 zeebe.createWorker({
-  taskType: "evaluate-answers-worker",
+  taskType: "elaborate-results-worker",
   taskHandler: async (job) => {
-	  console.log("Handling job: " + job.key + job.type + "with payload " + JSON.stringify(job));
-	  var samples_total = 10;
-	  var success_average = 0.8;
-	  console.log(`Handling job: ${job.key} card charged`);
-	  console.log(job.variables.trialId);
-	  return job.complete({
-		  "samples_total": samples_total,
-		  "success_average": success_average
-	  });
+    const trialId = job.variables.trialId;
+    try {
+      const response = await fetch(`http://localhost:8080/v1/trials/${trialId}/results`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer YOUR_JWT_TOKEN' // Sostituisci con token valido
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch results: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Fetched data:', data);
+      const results = data.results;
+      console.log('Fetched results:', results);
+
+      let totalSamples = 0;
+      let totalSuccess = 0;
+
+      for (const collaboratorId in results) {
+        const result = results[collaboratorId];
+        totalSamples += result.num_samples;
+        totalSuccess += result.num_success;
+      }
+
+      const successAverage = totalSamples > 0 ? totalSuccess / totalSamples : 0;
+
+      return job.complete({
+        totalSamples,
+        successAverage
+      });
+    } catch (error) {
+      console.error('Error while evaluating results:', error);
+      return job.fail(`Failed to evaluate results: ${error.message}`);
+    }
   },
   //timeout: 15000,
 });
