@@ -11,9 +11,9 @@
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmn:collaboration id="Collaboration_1lydzzk">
-    <bpmn:participant id="Participant_01kqyzm" processRef="call-rest-service" />
+    <bpmn:participant id="Participant_01kqyzm" processRef="clinical-trial" />
   </bpmn:collaboration>
-  <bpmn:process id="call-rest-service" name="call-rest-service" isExecutable="true">
+  <bpmn:process id="clinical-trial" name="clinical-trial" isExecutable="true">
     <bpmn:laneSet id="LaneSet_079fd6g">
       <bpmn:lane id="Lane_0e9zv76">
         <bpmn:flowNodeRef>Activity_0flvamb</bpmn:flowNodeRef>
