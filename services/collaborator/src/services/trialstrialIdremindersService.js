@@ -3,7 +3,7 @@ import * as trialsRepository from '../repositories/trialsRepository.js';
 export function trialReminder(req, res) {
     try {
         trialsRepository.createReminder(req.params.trialId, req.body);
-        res.statu(201).send({ description: 'Reminder created' });
+        res.status(201).send({ description: 'Reminder created' });
     } catch (err) {
         console.error(err);
         if (err.name === 'NotFoundError') {

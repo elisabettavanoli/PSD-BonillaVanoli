@@ -1,6 +1,6 @@
 import { NotFoundError } from '../exception/NotFoundError.js';
 
-const trials = new Map();
+const trials = {};
 let trialIdSequence = 0;
 
 export function createTrial(newTrial){
