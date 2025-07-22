@@ -1,0 +1,100 @@
+{
+  "components": [
+    {
+      "label": "Title",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0vfche7",
+        "columns": null
+      },
+      "id": "Field_0x2ty2j",
+      "key": "new_trial.title",
+      "readonly": "on",
+      "disabled": false
+    },
+    {
+      "label": "Description",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0d5bsir",
+        "columns": null
+      },
+      "id": "Field_07r98wy",
+      "key": "new_trial.description",
+      "readonly": true
+    },
+    {
+      "label": "Target",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0s2ycmu",
+        "columns": null
+      },
+      "id": "Field_1xu1epp",
+      "key": "new_trial.target_type",
+      "readonly": "on"
+    },
+    {
+      "label": "Duration (in days)",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_03x1qko",
+        "columns": null
+      },
+      "id": "Field_1rrih21",
+      "key": "new_trial.duration",
+      "readonly": true
+    },
+    {
+      "label": "Minimum number of samples",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1yw63f2",
+        "columns": null
+      },
+      "id": "Field_1ddhnia",
+      "key": "new_trial.min_num_samples",
+      "readonly": "on"
+    },
+    {
+      "label": "Remuneration",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0cdp1ez",
+        "columns": null
+      },
+      "id": "Field_12dcbao",
+      "key": "new_trial.remuneration",
+      "readonly": "on"
+    },
+    {
+      "label": "Do you approve this trial?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0wycwkz",
+        "columns": null
+      },
+      "id": "Field_0rf2dr7",
+      "key": "result"
+    }
+  ],
+  "type": "default",
+  "id": "evaluate_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}
