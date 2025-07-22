@@ -85,7 +85,10 @@
         "columns": null
       },
       "id": "Field_0rf2dr7",
-      "key": "result"
+      "key": "result",
+      "validate": {
+        "required": true
+      }
     }
   ],
   "type": "default",

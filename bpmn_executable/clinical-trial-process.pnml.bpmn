@@ -70,14 +70,14 @@
         <bpmn:incoming>Flow_096whb2</bpmn:incoming>
         <bpmn:outgoing>Flow_07y6pll</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0qmiuxa">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateCatchEvent id="Event_0e6f21d" name="80 days&#10;">
         <bpmn:incoming>Flow_0zpe7hp</bpmn:incoming>
         <bpmn:outgoing>Flow_09c8cdc</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1bty1h8">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10S</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateCatchEvent id="Event_00tn8i9">
@@ -528,7 +528,7 @@
         <bpmn:incoming>Flow_0hguaky</bpmn:incoming>
         <bpmn:outgoing>Flow_01rswi5</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0nlwnrw">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT90S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateCatchEvent id="Event_0vgs1ll">
