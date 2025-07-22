@@ -3,11 +3,16 @@ import { AlreadyPresentError } from '../exception/AlreadyPresentError.js'
 
 const trials = {};
 
-export function createTrial(trial){
-    if(trials[trial.trialId])
+export function createTrial(trial) {
+    if (trials[trial.trialId])
         throw new AlreadyPresentError(`Trial with id ${trial.trialId} already present`);
 
-    trials[trial.trialId] = { ...trial };
+    const { trialId, ...trialData } = trial;
+
+    trials[trialId] = {
+        ...trialData,
+        status: "WAITING_FOR_START"
+    };
 }
 
 export function getTrials(){

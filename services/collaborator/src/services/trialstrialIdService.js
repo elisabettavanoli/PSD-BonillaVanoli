@@ -16,7 +16,7 @@ export function deleteTrial(req, res) {
 
 export function updateTrialStatus(req, res) {
     try {
-        trialsRepository.updateTrialStatus(req.params.trialId);
+        trialsRepository.updateTrialStatus(req.params.trialId, req.body.status);
         res.status(200).send({ description: 'Trial updated' });
     } catch (err) {
         console.error(err);
