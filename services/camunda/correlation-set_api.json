@@ -2,20 +2,19 @@
   "correlationSets": [
     {
       "apiDescription": "Async Api for accept/deny participation",
+      "name": "answers",
+      "correlationKey": "<trial_id>_<collaborator_id>",
       "correlationSet": {
-        "id_trial": "string",
-        "id_collaborator": "string",
-        "accepted": "boolean"
+        "answer": ["yes", "no"]
       }
     },
     {
       "apiDescription": "Async Api for share own results",
+      "name": "results",
+      "correlationKey": "<trial_id>_<collaborator_id>",
       "correlationSet": {
-        "id_trial": "string",
-        "result": {
-          "num_samples": "number",
-          "num_success": "number"
-        }
+        "num_samples": "number",
+        "num_success": "number"
       }
     }
   ]
