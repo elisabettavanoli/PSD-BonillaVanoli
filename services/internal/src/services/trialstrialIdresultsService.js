@@ -3,7 +3,7 @@ import * as trialsRepository from '../repositories/trialsRepository.js';
 export function getResults(req, res) {
     try {
         const results = trialsRepository.getResults(req.params.trialId);
-        res.send({ resuts: results });
+        res.send({ results: results });
     } catch (err) {
         console.error(err);
         if (err.name === 'NotFoundError') {

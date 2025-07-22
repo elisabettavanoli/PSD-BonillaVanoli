@@ -1,0 +1,75 @@
+{
+  "components": [
+    {
+      "label": "Trial Title",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1dolk90",
+        "columns": null
+      },
+      "id": "Field_0tdd9zg",
+      "key": "trial_title"
+    },
+    {
+      "text": "Collected results",
+      "type": "text",
+      "layout": {
+        "row": "Row_01xd7se",
+        "columns": null
+      },
+      "id": "Field_168zt6q"
+    },
+    {
+      "label": "Number of participants",
+      "type": "number",
+      "layout": {
+        "row": "Row_10clqrv",
+        "columns": null
+      },
+      "id": "Field_0er8bwk",
+      "key": "num_participants",
+      "readonly": true
+    },
+    {
+      "label": "Total samples collected",
+      "type": "number",
+      "layout": {
+        "row": "Row_15rcnlp",
+        "columns": null
+      },
+      "id": "Field_041cvho",
+      "key": "samples_total",
+      "readonly": "on"
+    },
+    {
+      "label": "Avarage success rate",
+      "type": "number",
+      "layout": {
+        "row": "Row_1f5pdyp",
+        "columns": null
+      },
+      "id": "Field_1u8q66l",
+      "key": "success_average",
+      "readonly": "on"
+    },
+    {
+      "label": "Conlcusions",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1v29evd",
+        "columns": null
+      },
+      "id": "Field_16bg6xe",
+      "key": "trial_conclusions"
+    }
+  ],
+  "type": "default",
+  "id": "write_report_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}

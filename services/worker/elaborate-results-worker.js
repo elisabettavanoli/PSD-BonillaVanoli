@@ -44,10 +44,9 @@ zeebe.createWorker({
       let totalSamples = 0;
       let totalSuccess = 0;
 
-      for (const collaboratorId in results) {
-        const result = results[collaboratorId];
-        totalSamples += result.num_samples;
-        totalSuccess += result.num_success;
+      for (const result of results) {
+        totalSamples += Number(result.num_samples);
+        totalSuccess += Number(result.num_success);
       }
 
       const successAverage = totalSamples > 0 ? totalSuccess / totalSamples : 0;

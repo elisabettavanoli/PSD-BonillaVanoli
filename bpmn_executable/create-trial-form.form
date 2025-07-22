@@ -1,0 +1,97 @@
+{
+  "components": [
+    {
+      "text": "Create a trial",
+      "type": "text",
+      "layout": {
+        "row": "Row_1yh4akr",
+        "columns": 14
+      },
+      "id": "Field_0n4b7ej"
+    },
+    {
+      "label": "Title",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1txj0kw",
+        "columns": null
+      },
+      "id": "Field_1vx72lf",
+      "key": "title"
+    },
+    {
+      "label": "Description",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k6tf5d",
+        "columns": null
+      },
+      "id": "Field_1iyhlqq",
+      "key": "description"
+    },
+    {
+      "label": "Target",
+      "values": [
+        {
+          "label": "Human",
+          "value": "human"
+        },
+        {
+          "label": "Animal",
+          "value": "animal"
+        },
+        {
+          "label": "Sample",
+          "value": "sample"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_0eba6kb",
+        "columns": null
+      },
+      "id": "Field_0pa53l0",
+      "key": "target_type",
+      "defaultValue": "sample"
+    },
+    {
+      "label": "Duration (in days)",
+      "type": "number",
+      "layout": {
+        "row": "Row_0v6vsxu",
+        "columns": null
+      },
+      "id": "Field_0vfn87i",
+      "key": "duration"
+    },
+    {
+      "label": "Minimum number of samples",
+      "type": "number",
+      "layout": {
+        "row": "Row_0qh6kgn",
+        "columns": null
+      },
+      "id": "Field_0fe68ab",
+      "key": "min_num_samples"
+    },
+    {
+      "label": "Remuneration",
+      "type": "number",
+      "layout": {
+        "row": "Row_0tj2bl0",
+        "columns": null
+      },
+      "id": "Field_0s62acc",
+      "key": "remuneration"
+    }
+  ],
+  "type": "default",
+  "id": "create_trial_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}
