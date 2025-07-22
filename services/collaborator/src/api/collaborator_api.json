@@ -356,7 +356,9 @@
               "success_average": {
                 "type": "number",
                 "format": "float"
-              }
+              },
+              "num_participants": { "type": "integer" },
+              "trial_conclusions": { "type": "string" }
             },
             "required": [
               "samples_total",
