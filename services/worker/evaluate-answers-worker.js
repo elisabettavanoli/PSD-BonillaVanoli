@@ -25,15 +25,11 @@ zeebe.createWorker({
     const collaboratorsAnswers = job.variables.collaborators_answers || [];
     console.log("Collaborators answers:", collaboratorsAnswers);
 
-    // Estrai solo gli ID dei collaboratori che hanno risposto "yes" e rimuovi duplicati
-    const participantsIds = Array.from(new Set(
-      collaboratorsAnswers
-        .filter(([_, answer]) => answer === "yes")
-        .map(([collaborator_id, _]) => collaborator_id)
-    ));
+    const participantsIds = collaboratorsAnswers
+      .filter(([_, answer]) => answer === "yes")
+      .map(([collaborator_id, _]) => collaborator_id);
 
-    //const approved = participants.length > 2;
-      const approved = true;
+    const approved = participantsIds.length > 1;
 
     console.log(`Participants: ${participantsIds}, Approved: ${approved}`);
 

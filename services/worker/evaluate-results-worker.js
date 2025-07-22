@@ -22,7 +22,9 @@ zeebe.createWorker({
 	taskType: "evaluate-results-worker",
 	taskHandler: async (job) => {
 		const participantsResults = job.variables.participants_results || [];
-		const finalParticipants = participantsResults.map(entry => entry[0]);
+		const finalParticipants = participantsResults
+			.filter(entry => Array.isArray(entry) && entry[0] != null)
+			.map(entry => entry[0]);
 		const approved = finalParticipants.length > 1;
 
 		console.log(`Final Participants: ${finalParticipants}, Approved: ${approved}`);
