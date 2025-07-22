@@ -6,7 +6,7 @@ The initiator design a trial protocol. It asks for the internal ethical committe
 * Elisabetta Vanoli 10777232
 
 ## Choreographed process
-The initiator, after getting the internal ethical committee's approval, starts the process by sending an invite to collaborators to partecipate in the clinical trial. After 10 days, if at least 5 collaborators decided to participate, the initiator send them a notification to start the experimentation. They have 90 days to send back their results; if the collaborators did not sent them in 80 days, the initiator sends them a reminder. Once the results are collected, the initiator analyzes all the received results and writes a final report of the clinical trial and sends it to those who participated.
+The initiator, after getting the internal ethical committee's approval, starts the process by sending an invite to collaborators to partecipate in the clinical trial. After 10 days, if at least N collaborators decided to participate, the initiator send them a notification to start the experimentation. They have 90 days to send back their results; if the collaborators did not sent them in 80 days, the initiator sends them a reminder. Once the results are collected, the initiator analyzes all the received results and writes a final report of the clinical trial and sends it to those who participated.
 
 ![Choreography Diagram](images/choreography.png)
 
