@@ -17,6 +17,26 @@
   ],
   "paths": {
     "/trials": {
+      "get": {
+        "summary": "Get all the 'trial' resources in the collaborator context",
+        "operationId": "getTrials",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/GetTrialsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
       "post": {
         "summary": "Create a new trial resource in the Initiator context",
         "operationId": "createTrial",
@@ -334,21 +354,30 @@
         "type": "object",
         "properties": {
           "results": {
-            "type": "object",
-            "properties": {
-              "sample_total": {
-                "type": "integer"
-              },
-              "success_average": {
-                "type": "number",
-                "format": "float"
-              }
-            },
-            "required": [
-              "sample_total",
-              "success_average"
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultRequest"
+            }
           }
+        },
+        "required": ["results"]
+      },
+      "GetTrialsResponse": {
+        "type": "array",
+        "items": {
+          "allOf": [
+            { "$ref": "#/components/schemas/CreationRequest" },
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["WAITING_FOR_START", "STARTED", "ENDED"]
+                }
+              },
+              "required": ["status"]
+            }
+          ]
         }
       }
     }

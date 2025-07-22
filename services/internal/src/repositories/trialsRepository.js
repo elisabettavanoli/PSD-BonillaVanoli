@@ -7,9 +7,13 @@ export function createTrial(newTrial){
     const currTrialId = trialIdSequence;
     trialIdSequence++;
 
-    trials[currTrialId] = newTrial;
+    trials[currTrialId] = { ...newTrial };
 
     return currTrialId;
+}
+
+export function getTrials(){
+    return trials;
 }
 
 export function deleteTrial(trialId){

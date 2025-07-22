@@ -5,3 +5,12 @@ export function createTrial(req, res) {
     res.status(201).send({ trialId: String(trialId) });
 }
 
+export function getTrials(req, res) {
+    try{
+        const trials = trialsRepository.getTrials()
+        res.send({ trials: trials });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+}

@@ -17,6 +17,26 @@
   ],
   "paths": {
     "/trials": {
+      "get": {
+        "summary": "Get all the 'trial' resources in the collaborator context",
+        "operationId": "getTrials",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/GetTrialsResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
       "post": {
         "summary": "Create the 'trial' resource in the collaborator context, which will initialize the trial status with 'WAITING_FOR_START' ",
         "operationId": "createTrial",
@@ -39,8 +59,14 @@
           "201": {
             "description": "Trial created"
           },
+          "400": {
+            "description": "Trial with trialId already present"
+          },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -73,10 +99,13 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       },
-      "put": {
+      "patch": {
         "summary": "Update the status (started, ended, ...) of the trial resource in the collaborator context",
         "operationId": "updateTrialStatus",
         "security": [
@@ -113,6 +142,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -155,6 +187,9 @@
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -190,13 +225,16 @@
         },
         "responses": {
           "200": {
-            "description": "Report updated"
+            "description": "Report created or updated"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "Trial not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -285,7 +323,6 @@
           "status": {
             "type": "string",
             "enum": [
-              "WAITING_FOR_START",
               "STARTED",
               "ENDED"
             ]
@@ -330,6 +367,24 @@
         "required": [
           "result"
         ]
+      },
+      "GetTrialsResponse": {
+        "type": "array",
+        "items": {
+          "allOf": [
+            { "$ref": "#/components/schemas/CreationRequest" },
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["WAITING_FOR_START", "STARTED", "ENDED"]
+                }
+              },
+              "required": ["status"]
+            }
+          ]
+        }
       }
     }
   }
