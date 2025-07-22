@@ -97,8 +97,6 @@
         <bpmn:extensionElements>
           <zeebe:ioMapping>
             <zeebe:output source="=[participant[1],[num_samples, num_success]]" target="participant_results" />
-            <zeebe:output source="=num_samples" target="num_samples" />
-            <zeebe:output source="=num_success" target="num_success" />
           </zeebe:ioMapping>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1pceq6s</bpmn:incoming>
@@ -137,7 +135,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="PATCH" target="method" />
             <zeebe:input source="=participant[2]+&#34;/trials/&#34;+string(trial_id)" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -162,7 +161,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="POST" target="method" />
             <zeebe:input source="=participant[2]+&#34;/trials/&#34;+string(trial_id)+&#34;/reminders&#34;" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -187,13 +187,14 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="PUT" target="method" />
             <zeebe:input source="=internal_url+&#34;/trials/&#34; +string(trial_id)+&#34;/results/&#34;+string(participant[1])" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
             <zeebe:input source="=20" target="connectionTimeoutInSeconds" />
             <zeebe:input source="=20" target="readTimeoutInSeconds" />
-            <zeebe:input source="={&#34;num_samples&#34;: participant_result[2][1],&#10;&#34;num_success&#34;: participant_result[2][2]}" target="body" />
+            <zeebe:input source="={&#34;num_samples&#34;: participant_results[2][1],&#10;&#34;num_success&#34;: participant_results[2][2]}" target="body" />
             <zeebe:input source="=false" target="ignoreNullValues" />
           </zeebe:ioMapping>
           <zeebe:taskHeaders>
@@ -214,7 +215,8 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
         <zeebe:ioMapping>
-          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="bearer" target="authentication.type" />
+          <zeebe:input source="=token" target="authentication.token" />
           <zeebe:input source="DELETE" target="method" />
           <zeebe:input source="=internal_url+&#34;/trials/&#34; +string(trial_id)" target="url" />
           <zeebe:input source="=false" target="storeResponse" />
@@ -239,6 +241,7 @@
         <zeebe:userTask />
         <zeebe:formDefinition formId="create_trial_form" />
       </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1mapo65</bpmn:incoming>
       <bpmn:outgoing>Flow_0g1pzqq</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:serviceTask id="Activity_0utx6t2" name="elaborate results">
@@ -290,8 +293,8 @@
       <bpmn:extensionElements>
         <zeebe:ioMapping>
           <zeebe:output source="=&#34;http://host.docker.internal:8080/v1&#34;" target="internal_url" />
-          <zeebe:output source="=&#34;http://host.docker.internal:4000/v1&#34;" target="collaborator_url" />
           <zeebe:output source="=[[&#34;c1&#34;, &#34;http://host.docker.internal:4001/v1&#34;], [&#34;c2&#34;, &#34;http://host.docker.internal:4002/v1&#34;]]" target="collaborators" />
+          <zeebe:output source="=&#34;eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIycnhEbHk1dnhFci13U0FtcnhiRG82bF9lYjNkYzktRnF0VUNTU1FuNHZZIn0.eyJleHAiOjE3NTMyMjg1MzUsImlhdCI6MTc1MzE5MjUzNSwianRpIjoib25ydHJvOmIxMzVlNzRhLTg5ZGMtNGQwNC04NjVlLWM2M2I1YTc0MWU2NCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTA5MC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjU1NWUzYzk2LTI4NmMtNDQ5Mi1hMmEwLWZmNjFhYTliMzY3YiIsInR5cCI6IkJlYXJlciIsImF6cCI6InBzZC1jbGluaWNhbC10cmlhbCIsInNpZCI6ImE5YzJhNTM5LTcyNTktNDg5ZS1iYjZhLTdhYWY1YWE5OWUyNCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiZWxpIn0.ei3hpv63Cdv-8OMfsjo3NfnKzTcV1UYfXh_XZ5HW3EYpLJF7Ku_JfMnXQgHtWGGTBtt_N8nWavXqktWhHmpjSOE0ADDboqlwtSW1k1qG2jKtXBt76qxM13PKayNoBR6epbEi9fD2v3LX2PoMA_sgQU5JsCgO0uqji3sP8_fmUxZtQ8dyIGga1rFSd4Qtvy_v-dnMLJLQkuwhmV3dL_VPgLlRobrW-D3w8NPxV-A0e2nVESl43iyROuq1MIUDgwbl3q86QTEHyzyvVAfoKsN574BfIfqAnXoNS1e1nGZ72s_yfwJhFD7P2UhyugO4a7MI1K8dqVLQaBZYJ6AjeWWFyQ&#34;" target="token" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1mapo65</bpmn:outgoing>
@@ -322,7 +325,7 @@
     <bpmn:sequenceFlow id="Flow_117crjk" sourceRef="Activity_1bavlor" targetRef="Gateway_1readgl" />
     <bpmn:sequenceFlow id="Flow_1g9m3y9" sourceRef="Activity_02i0c2a" targetRef="Gateway_1msq02p" />
     <bpmn:sequenceFlow id="Flow_1iazwv5" sourceRef="Gateway_01yyybh" targetRef="Activity_1xk4rr4" />
-    <bpmn:sequenceFlow id="Flow_1mapo65" sourceRef="Event_1xtwytl" targetRef="Activity_0d68d1n" />
+    <bpmn:sequenceFlow id="Flow_1mapo65" sourceRef="Event_1xtwytl" targetRef="Activity_1nobavi" />
     <bpmn:sequenceFlow id="Flow_1muefod" sourceRef="Gateway_0ijn7eo" targetRef="Gateway_0lyyh9r">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=evaluate_results_result=false</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -378,7 +381,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="DELETE" target="method" />
             <zeebe:input source="=participant[2]+&#34;/trials/&#34;+string(trial_id)" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -422,7 +426,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="PUT" target="method" />
             <zeebe:input source="=final_participant[2]+&#34;/trials/&#34;+string(trial_id)+&#34;/report&#34;" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -448,7 +453,8 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
         <zeebe:ioMapping>
-          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="bearer" target="authentication.type" />
+          <zeebe:input source="=token" target="authentication.token" />
           <zeebe:input source="PUT" target="method" />
           <zeebe:input source="=internal_url+&#34;/trials/&#34;+string(trial_id)+&#34;/report&#34;" target="url" />
           <zeebe:input source="=false" target="storeResponse" />
@@ -484,7 +490,8 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
         <zeebe:ioMapping>
-          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="bearer" target="authentication.type" />
+          <zeebe:input source="=token" target="authentication.token" />
           <zeebe:input source="POST" target="method" />
           <zeebe:input source="=internal_url+&#34;/trials&#34;" target="url" />
           <zeebe:input source="=false" target="storeResponse" />
@@ -502,7 +509,6 @@
         </zeebe:taskHeaders>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_113et97</bpmn:incoming>
-      <bpmn:incoming>Flow_1mapo65</bpmn:incoming>
       <bpmn:outgoing>Flow_1pcf6ho</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:subProcess id="Activity_0na2cm3" name="Request for participation">
@@ -560,7 +566,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="POST" target="method" />
             <zeebe:input source="=collaborator[2]+&#34;/trials&#34;" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -603,7 +610,8 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
         <zeebe:ioMapping>
-          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="bearer" target="authentication.type" />
+          <zeebe:input source="=token" target="authentication.token" />
           <zeebe:input source="DELETE" target="method" />
           <zeebe:input source="=internal_url + &#34;/trials/&#34; + string(trial_id)" target="url" />
           <zeebe:input source="=false" target="storeResponse" />
@@ -654,7 +662,8 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
           <zeebe:ioMapping>
-            <zeebe:input source="noAuth" target="authentication.type" />
+            <zeebe:input source="bearer" target="authentication.type" />
+            <zeebe:input source="=token" target="authentication.token" />
             <zeebe:input source="DELETE" target="method" />
             <zeebe:input source="=collaborator[2] + &#34;/trials/&#34; + string(trial_id)" target="url" />
             <zeebe:input source="=false" target="storeResponse" />
@@ -1096,9 +1105,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1mapo65_di" bpmnElement="Flow_1mapo65">
         <di:waypoint x="248" y="570" />
-        <di:waypoint x="389" y="570" />
-        <di:waypoint x="389" y="600" />
-        <di:waypoint x="530" y="600" />
+        <di:waypoint x="300" y="570" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1fpvmja" bpmnElement="Flow_1muefod">
         <di:waypoint x="3575" y="570" />

@@ -25,8 +25,8 @@ var cert = fs.readFileSync('public.pem');
 const config = {middleware: {
         security: {
             auth: {
-                //bearerAuth: bearerJwt({issuer: 'http://localhost:9090/realms/master', secret: cert, algorithms: ['RS256']})
-                bearerAuth: () => { /* no-op */ },
+                bearerAuth: bearerJwt({issuer: 'http://localhost:9090/realms/master', secret: cert, algorithms: ['RS256']})
+
             }
         }
     }

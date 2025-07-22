@@ -11,9 +11,7 @@ app.use(express.json({limit: '50mb'}));
 
 var cert = fs.readFileSync('public.pem');
 
-const config = {}
 
-/*
 const config = {middleware: {
         security: {
             auth: {
@@ -22,7 +20,7 @@ const config = {middleware: {
         }
     }
 }
-*/
+
 
 initialize(app, config).then(() => {
     http.createServer(app).listen(serverPort, () => {
